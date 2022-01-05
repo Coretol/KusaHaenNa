@@ -1,0 +1,16 @@
+name: "KusaHaenNa"
+main: net.coretol.kusahaenna.KusaHaenNa
+version: 1.0
+api-version: 1.16
+commands:
+  kusa:
+    description: "指定した半径内の地中に埋まっている草を削除します"
+    usage: "/kusa [radius]"
+    permission: kusahaenna.kusa
+permissions:
+  kusahaenna.*:
+    default: op
+    children:
+      - kusahaenna.kusa
+  kusahaenna.kusa:
+    default: op
