@@ -30,7 +30,7 @@ tasks.create<Copy>("buildPlugin") {
 }
 
 tasks.create("writeVersionToFile") {
-    File("versions.txt").apply {
+    File("version.txt").apply {
         if(!exists()) {
             createNewFile()
         }
