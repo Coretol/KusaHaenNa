@@ -28,3 +28,12 @@ tasks.create<Copy>("buildPlugin") {
     from(tasks.shadowJar)
     into("server/plugins/")
 }
+
+tasks.create("writeVersionToFile") {
+    File("versions.txt").apply {
+        if(!exists()) {
+            createNewFile()
+        }
+        writeText(version as String)
+    }
+}
