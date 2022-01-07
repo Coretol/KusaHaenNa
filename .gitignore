@@ -1,3 +1,5 @@
 /server/
 /.gradle/
 /build/
+/version.txt
+/versions.txt
