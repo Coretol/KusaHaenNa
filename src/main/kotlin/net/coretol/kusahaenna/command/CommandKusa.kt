@@ -7,20 +7,25 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
+/**
+ * executor of /kusa
+ */
 class CommandKusa:CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         return if(sender is Player) {
             val radius = args.getOrNull(0)?.toIntOrNull() ?: 5//半径
             val kusa = KusaHaener(sender.location,radius,sender)//草を消すやつのインスタンス
             sender.sendMessage("${ChatColor.GREEN}[草] 草を探しています")
+            //草を非同期でチェックする。
             kusa.check().whenComplete { queue, exception ->
-                exception?.let {//error
+                exception?.let {//例外
                     it.printStackTrace()
                     sender.sendMessage("${ChatColor.RED}[草] エラー:${it.message}")
                 } ?: run {
                     sender.sendMessage("${ChatColor.GREEN}[草] あなたの周りの${radius * radius}個のチャンクの中で${queue.size}個の地中に埋まっている草を見つけました。削除を開始します。")
+                    //check()で取得した草ブロックをdeleteKusaですべて消す
                     kusa.deleteKusa(queue).whenComplete { _, exception ->
-                        exception?.let {
+                        exception?.let {//例外
                             it.printStackTrace()
                             sender.sendMessage("${ChatColor.RED}[草] エラー:${it.message}")
                         } ?: run {
