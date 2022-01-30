@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "net.coretol"
-version = "1.0"
+version = "1.1"
 
 repositories {
     mavenCentral()
@@ -27,13 +27,4 @@ tasks.withType<KotlinCompile> {
 tasks.create<Copy>("buildPlugin") {
     from(tasks.shadowJar)
     into("server/plugins/")
-}
-
-tasks.create("writeVersionToFile") {
-    File("version.txt").apply {
-        if(!exists()) {
-            createNewFile()
-        }
-        writeText(version as String)
-    }
 }

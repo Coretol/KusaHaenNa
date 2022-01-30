@@ -9,8 +9,18 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import java.util.*
 
+/**
+ * タスクのマネージャー
+ */
 object TaskManager {
+    /**
+     * 直近で最後のタスクID
+     */
     var lastID = 0
+
+    /**
+     * タスクのマップ
+     */
     val tasks = mutableMapOf<Player, MutableList<TaskRunnable<Any>>>()
 
     init {
@@ -24,6 +34,14 @@ object TaskManager {
         )
     }
 
+    /**
+     * [KusaCheckTask]を開始する
+     *
+     * @param player プレイヤー
+     * @param center 中心
+     * @param radius 半径
+     * @return [KusaCheckTask]のインスタンス
+     */
     fun startCheckTask(player: Player, center: Location, radius: Int): KusaCheckTask {
         return KusaCheckTask(++lastID, center, radius).also {
             tasks.computeIfAbsent(player) { mutableListOf() }.add(it)
@@ -31,6 +49,13 @@ object TaskManager {
         }
     }
 
+    /**
+     * [KusaToDirtTask]を開始する
+     *
+     * @param player プレイヤー
+     * @param queue 草のキュー
+     * @return [KusaToDirtTask]のインスタンス
+     */
     fun startToDirtTask(player: Player, queue: Queue<Block>): KusaToDirtTask {
         return KusaToDirtTask(++lastID, queue).also {
             tasks.computeIfAbsent(player) { mutableListOf() }.add(it)
@@ -38,11 +63,16 @@ object TaskManager {
         }
     }
 
+    /**
+     * アクションバーを描画
+     *
+     * @param player プレイヤー
+     */
     fun renderActionBar(player: Player) {
         val tasks = tasks[player] ?: return
         var str = "[${ChatColor.GREEN}草${ChatColor.WHITE}] "
         ArrayList(tasks).forEach { task ->
-            if(task.isComplete) {
+            if (task.isComplete) {
                 return@forEach
             }
             val progress = task.progress.toDouble() / task.maxProgress.toDouble()
@@ -50,8 +80,8 @@ object TaskManager {
             val notFinishedCount = 20 - finishedCount
             str += "  "
             str += "Task${task.taskID} "
-            str += "%.2f%%".format(progress*100)
-            str+="[${ChatColor.GREEN}"
+            str += "%.2f%%".format(progress * 100)
+            str += "[${ChatColor.GREEN}"
             (0..finishedCount).forEach {
                 str += "|"
             }
