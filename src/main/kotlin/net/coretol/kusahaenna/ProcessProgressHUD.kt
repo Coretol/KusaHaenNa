@@ -1,5 +1,3 @@
 package net.coretol.kusahaenna
 
-class ProcessProgressHUD {
-
-}
+class ProcessProgressHUD

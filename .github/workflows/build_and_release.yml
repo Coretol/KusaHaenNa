@@ -52,18 +52,18 @@ jobs:
       - name: Get file name
         id: get-filename
         run: echo ::set-output name=filename::$(ls -1 ./build/libs/)
-      - name: writeVersionToFile
-        run: ./gradlew writeVersionToFile
       - name: Get version
         id: get-version
-        run: echo ::set-output name=version::$(cat ./version.txt)
+        uses: thecodemonkey/action-get-gradle-version@master
+        with:
+          file: build.gradle.kts
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get-version.outputs.version }}-${{ github.run_number }}
+          tag_name: ${{ steps.get-version.outputs.version }}
           release_name: ${{ steps.get-version.outputs.version }} ${{ github.event.head_commit.message }}
           body: ""
           draft: false
