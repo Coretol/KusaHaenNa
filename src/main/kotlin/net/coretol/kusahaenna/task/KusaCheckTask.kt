@@ -54,7 +54,6 @@ class KusaCheckTask(override val taskID: Int, center: Location, val radius: Int)
                 }
             }
         }
-        progress++
         if (progress >= maxProgress) {
             whenComplete.invoke(queue)
             isComplete = true
